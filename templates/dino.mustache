@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style.css">
+    {{#myDino}}<title>{{name}}</title>{{/myDino}}
+  </head>
+  <body>
+    {{#myDino}}
+<h2>{{name}}</h2>
+<img src="{{image}}" alt="{{name}}">
+<p>{{size}}</p>
+<p>{{weight}}</p>
+<p>{{period}}</p>
+<ul>
+  {{#habitats}}
+  <li>{{.}}</li>
+  {{/habitats}}
+</ul>
+  <button type="button" name="delete" id="delete" data-id="{{id}}">Delete</button>
+  <button type="button" name="button">Edit</button>
+<script type="text/javascript" src="main.js"> </script>
+{{/myDino}}
+  </body>
+</html>
