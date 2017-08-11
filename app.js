@@ -4,7 +4,7 @@ const app = express();
 const mustacheExpress = require('mustache-express');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.engine('mustache', mustacheExpress());
@@ -19,7 +19,7 @@ var dinosaurs = [
     size: '23 ft.',
     weight: '16,000 pounds',
     period: 'Late Cretaceous',
-    habitats: ['coastal', 'tropical', 'forest']
+    habitats: 'coastal,tropical,forest'
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ var dinosaurs = [
     size: '11 ft.',
     weight: '6,000 pounds',
     period: 'Late Jurassic',
-    habitats: ['sub-tropical', 'forest']
+    habitats: 'sub-tropical,forest'
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ var dinosaurs = [
     size: '9.5 ft.',
     weight: '14,0000 pounds',
     period: 'Late Cretaceous',
-    habitats: ['tropical']
+    habitats: 'tropical'
   },
   {
     id: 4,
@@ -47,26 +47,26 @@ var dinosaurs = [
     size: '50 ft.',
     weight: '30,000 pounds',
     period: 'Late Cretaceous',
-    habitats: ['forest']
+    habitats: 'forest'
   }
 ];
 //dino homepage
-app.get('/index', (req, res) => {
+app.get('/', (req, res) => {
   res.render('index', { dinosaurs });
 });
 
 //click dinosaur and get dino info!
 app.get('/dinosaurs/:id', (req, res) => {
-  const dinoID = parseInt(req.params.id);
-  const myDino = dinosaurs.find(dino => {
-    return dino.id === dinoID;
-  });
-  res.render('dino', { myDino });
+  res.render('dino');
 });
 
 //create a new dino page!
 app.get('/newdino', (req, res) => {
-  res.render('newdino', { dinosaurs });
+  res.render('newdino');
+});
+
+app.post('/newdino', (req, res) => {
+  res.render('newdino');
 });
 
 app.post('/', (req, res) => {
@@ -83,12 +83,11 @@ app.post('/', (req, res) => {
   res.render('index', { dinosaurs });
 });
 
-//delete dino!
-// app.post('/deletedino', (req, res) => {
-//   const dinoID = parseInt(req.params.id);
-//   dinosaurs = dinosaurs.filter(dino => dino.id !== dinoID);
-//   res.render('index', { dinosaurs });
-// });
+//edit a dino!
+
+app.get('/editdino/:id', (req, res) => {
+  res.render('editdino');
+});
 
 // GET /api/dinosaurs
 app.get('/api/dinosaurs', (req, res) => {
@@ -140,7 +139,7 @@ app.put('/api/dinosaurs/:id', (req, res) => {
     myDino.size = req.body.size;
     myDino.weight = req.body.weight;
     myDino.period = req.body.period;
-    myDino.habitats = req.body.habitat;
+    myDino.habitats = req.body.habitats;
   } else {
     const newDino = {
       id: dinosaurs.length + 1,
@@ -159,7 +158,7 @@ app.put('/api/dinosaurs/:id', (req, res) => {
 app.delete('/api/dinosaurs/:id', (req, res) => {
   const dinoID = parseInt(req.params.id);
   dinosaurs = dinosaurs.filter(dino => dino.id !== dinoID);
-  res.redirect('index', { dinosaurs });
+  res.render('index', { dinosaurs });
 });
 
 app.listen(3000, () => {
